@@ -18,6 +18,4 @@
    - Ensure PostgreSQL is installed and running within the container.
 
 
-**dummy data path**
-dump file is located at 
-sh /usr/src/app/tmp
+**dummy data path** : /usr/src/app/tmp
