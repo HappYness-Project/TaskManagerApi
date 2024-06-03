@@ -18,4 +18,4 @@
    - Ensure PostgreSQL is installed and running within the container.
 
 
-**dummy data path** : /usr/src/app/tmp
+**dummy data path** : /usr/src/app/tmp in Docker container and project_root/tmp in local machine
