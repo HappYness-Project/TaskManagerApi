@@ -6,9 +6,15 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Mounts the application code to the image
-COPY . .
+COPY . /usr/src/app/
 
 EXPOSE 8000
+
+# Make the entrypoint script executable
+RUN chmod +x /usr/src/app/entrypoint.sh
+
+# Set the entrypoint script
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
 
 # runs the production server
 # ENTRYPOINT ["python", "task_management/manage.py"]
