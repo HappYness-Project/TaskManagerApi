@@ -4,7 +4,7 @@ from .serializers import TaskContainerSerializer, TaskSerializer
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
-
+from rest_framework.decorators import api_view
 #Get active user model from django
 User = get_user_model()
 
@@ -57,5 +57,23 @@ class TaskCreateView(generics.CreateAPIView):
             task_container.tasks.add(task)
             
             headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+            return Response(status=status.HTTP_201_CREATED, headers=headers)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['PATCH'])
+def toggle_task_completion(request, pk):
+    try:
+        task = Task.objects.get(pk=pk)
+    except Task.DoesNotExist:
+        return Response({"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
+    
+    # Check if 'is_completed' field is present in the request data
+    is_completed = request.data.get('is_completed', None)
+    if is_completed is not None:
+        # Toggle the value of 'is_completed'
+        task.is_completed = not is_completed
+        task.save()
+        
+        return Response(status=status.HTTP_200_OK)
+    else:
+        return Response({"error": "is_completed field missing in request data"}, status=status.HTTP_400_BAD_REQUEST)

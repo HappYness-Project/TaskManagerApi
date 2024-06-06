@@ -8,5 +8,5 @@ urlpatterns = [
     path('api/task-containers/<uuid:container_id>/tasks/', views.TaskListView.as_view(), name='task-list'),
     path('api/tasks/<uuid:pk>/', views.TaskDetailView.as_view(), name='task-detail'),
     path('api/tasks/delete/<uuid:pk>/',views.TaskDeleteView.as_view(), name='task-delete'),
-    path('api/tasks/create/',views.TaskCreateView.as_view(), name='task-create'),
+    path('api/tasks/<uuid:pk>/toggle-completion/', views.toggle_task_completion, name='task-complete-toggle'),
 ]
