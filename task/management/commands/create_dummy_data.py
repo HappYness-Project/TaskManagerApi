@@ -1,7 +1,7 @@
-# core/management/commands/create_dummy_data.py
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 from task.models import Task, TaskContainer, TaskCategory, Priority
+from users.models import UserGroup
 from faker import Faker
 from datetime import datetime, timedelta
 import random
@@ -13,12 +13,24 @@ class Command(BaseCommand):
         fake = Faker()
         User = get_user_model()
 
-        # Create dummy users
+        # Create dummy user groups
+        user_groups = []
+        for _ in range(5):
+            user_group = UserGroup.objects.create(
+                group_name=fake.company(),
+                group_type=random.choice(['type1', 'type2'])
+            )
+            user_groups.append(user_group)
+        self.stdout.write(self.style.SUCCESS('Successfully created dummy user groups'))
+
+        # Create dummy users and assign them to user groups
         for _ in range(10):
-            User.objects.create_user(
+            user_group = random.choice(user_groups)
+            user = User.objects.create_user(
                 username=fake.user_name(),
                 email=fake.email(),
-                password='password123'
+                password='password123',
+                user_group=user_group
             )
         self.stdout.write(self.style.SUCCESS('Successfully created dummy users'))
 
@@ -38,15 +50,13 @@ class Command(BaseCommand):
 
         # Create dummy task containers
         for _ in range(10):
+            user_group = random.choice(user_groups)
             container = TaskContainer.objects.create(
-                container_name=fake.word()
+                container_name=fake.word(),
+                user_group=user_group
             )
             # Add random tasks to the container
             tasks_to_add = Task.objects.filter(task_id__in=random.sample(task_ids, random.randint(1, 10)))
             container.tasks.set(tasks_to_add)
-
-            # Add random users to the container
-            users_to_add = User.objects.order_by('?')[:random.randint(1, 5)]
-            container.users.set(users_to_add)
 
         self.stdout.write(self.style.SUCCESS('Successfully created dummy task containers'))

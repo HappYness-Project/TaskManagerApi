@@ -3,7 +3,7 @@ from .models import Task, TaskContainer
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ('task_name', 'task_category', 'priority', 'is_completed', 'created_date', 'target_date')
+    list_display = ('task_name', 'task_category', 'priority', 'is_completed', 'created_date', 'target_date', 'is_important')
     list_filter = ('task_category', 'priority', 'is_completed')
 
 @admin.register(TaskContainer)
