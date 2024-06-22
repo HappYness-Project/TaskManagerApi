@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 #Get active user model from django
 User = get_user_model()
 
@@ -77,3 +78,18 @@ def toggle_task_completion(request, pk):
         return Response(status=status.HTTP_200_OK)
     else:
         return Response({"error": "is_completed field missing in request data"}, status=status.HTTP_400_BAD_REQUEST)
+    
+class UserGroupTasksView(APIView):
+    def get(self, request, user_group_id):
+        is_important = request.query_params.get('isImportant')
+
+        if is_important is None:
+            return Response({"error": "Query parameter 'isImportant' is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Convert query parameter to boolean
+        is_important = is_important.lower() == 'true'
+
+        task_containers = TaskContainer.objects.filter(user_group_id=user_group_id)
+        tasks = Task.objects.filter(containers__in=task_containers, is_important=is_important).distinct()
+        serializer = TaskSerializer(tasks, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

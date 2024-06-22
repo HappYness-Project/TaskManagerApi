@@ -9,4 +9,5 @@ urlpatterns = [
     path('api/tasks/<uuid:pk>/', views.TaskDetailView.as_view(), name='task-detail'),
     path('api/tasks/delete/<uuid:pk>/',views.TaskDeleteView.as_view(), name='task-delete'),
     path('api/tasks/<uuid:pk>/toggle-completion/', views.toggle_task_completion, name='task-complete-toggle'),
+    path('api/user-groups/<int:user_group_id>/tasks', views.UserGroupTasksView.as_view(), name='user-group-tasks'),
 ]
