@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
-#Get active user model from django
+
 User = get_user_model()
 
 class TaskContainerListView(generics.ListAPIView):
@@ -33,11 +33,7 @@ class TaskListView(generics.ListAPIView):
         container = get_object_or_404(TaskContainer, container_id=container_id)
         return container.tasks.all()
 
-class TaskDetailView(generics.RetrieveAPIView):
-    queryset = Task.objects.all()
-    serializer_class = TaskSerializer
-
-class TaskDeleteView(generics.DestroyAPIView):
+class TaskDetailView(generics.RetrieveDestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     lookup_field = 'pk'
@@ -58,7 +54,7 @@ class TaskCreateView(generics.CreateAPIView):
             task_container.tasks.add(task)
             
             headers = self.get_success_headers(serializer.data)
-            return Response(status=status.HTTP_201_CREATED, headers=headers)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['PATCH'])
@@ -68,10 +64,8 @@ def toggle_task_completion(request, pk):
     except Task.DoesNotExist:
         return Response({"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
     
-    # Check if 'is_completed' field is present in the request data
     is_completed = request.data.get('is_completed', None)
     if is_completed is not None:
-        # Toggle the value of 'is_completed'
         task.is_completed = not is_completed
         task.save()
         
@@ -86,7 +80,6 @@ class UserGroupTasksView(APIView):
         if is_important is None:
             return Response({"error": "Query parameter 'isImportant' is required."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Convert query parameter to boolean
         is_important = is_important.lower() == 'true'
 
         task_containers = TaskContainer.objects.filter(user_group_id=user_group_id)

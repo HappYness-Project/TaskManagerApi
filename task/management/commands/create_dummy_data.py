@@ -42,6 +42,7 @@ class Command(BaseCommand):
                 task_desc=fake.paragraph(),
                 target_date=datetime.now() + timedelta(days=random.randint(1, 365)),
                 is_completed=fake.boolean(),
+                is_important=fake.boolean(),
                 priority=random.choice([Priority.URGENT, Priority.NORMAL, Priority.LOW]),
                 task_category=random.choice([TaskCategory.GROCERY, TaskCategory.TRAVEL, TaskCategory.LEISURE, TaskCategory.WORK])
             )
