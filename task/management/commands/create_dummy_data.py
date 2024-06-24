@@ -25,14 +25,14 @@ class Command(BaseCommand):
 
         # Create dummy users and assign them to user groups
         for _ in range(10):
-            user_group = random.choice(user_groups)
-            user = User.objects.create_user(
+            user = User.objects.create(
                 username=fake.user_name(),
                 email=fake.email(),
                 password='password123',
-                user_group=user_group
+                user_setting=None  # You can adjust this based on your UserSetting model
             )
-        self.stdout.write(self.style.SUCCESS('Successfully created dummy users'))
+            user.user_groups.set(random.sample(user_groups, random.randint(1, len(user_groups))))
+            self.stdout.write(self.style.SUCCESS(f'Successfully created user {user.username}'))
 
         # Create dummy tasks
         task_ids = []
@@ -59,5 +59,5 @@ class Command(BaseCommand):
             # Add random tasks to the container
             tasks_to_add = Task.objects.filter(task_id__in=random.sample(task_ids, random.randint(1, 10)))
             container.tasks.set(tasks_to_add)
-
+        
         self.stdout.write(self.style.SUCCESS('Successfully created dummy task containers'))
