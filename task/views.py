@@ -33,13 +33,18 @@ class TaskListView(generics.ListAPIView):
         container = get_object_or_404(TaskContainer, container_id=container_id)
         return container.tasks.all()
 
-class TaskDetailView(generics.RetrieveDestroyAPIView):
+class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     lookup_field = 'pk'
 
-class TaskCreateView(generics.CreateAPIView):
+class TaskListCreateView(generics.ListCreateAPIView):
     serializer_class = TaskSerializer
+
+    def get_queryset(self):
+        container_id = self.kwargs['pk']
+        container = get_object_or_404(TaskContainer, container_id=container_id)
+        return container.tasks.all()
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
