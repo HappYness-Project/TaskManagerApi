@@ -44,7 +44,7 @@ class TaskCreateView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            container_id = request.data.get('container_id')
+            container_id = kwargs.get('pk')
             try:
                 task_container = TaskContainer.objects.get(container_id=container_id)
             except TaskContainer.DoesNotExist:
