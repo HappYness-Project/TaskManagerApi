@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from users.models import UserGroup
 from task.models import TaskContainer
-from .serializers import UserGroupSerializer, TaskContainerSerializer
+from .serializers import UserGroupSerializer, TaskContainerSerializer, UserSerializer
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 
@@ -30,3 +30,8 @@ class TaskContainerListByUserGroup(APIView):
         task_containers = TaskContainer.objects.filter(user_group_id=pk)
         serializer = TaskContainerSerializer(task_containers, many=True)
         return Response(serializer.data)
+    
+class UserDetail(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
