@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 from task.models import Task, TaskContainer, TaskCategory, Priority
-from users.models import UserGroup
+from users.models import UserGroup, UserSetting
 from faker import Faker
 from datetime import datetime, timedelta
 import random
@@ -34,6 +34,10 @@ class Command(BaseCommand):
             user.user_groups.set(random.sample(user_groups, random.randint(1, len(user_groups))))
             self.stdout.write(self.style.SUCCESS(f'Successfully created user {user.username}'))
 
+        for _ in range(5):
+            usersetting = UserSetting.objects.create()
+            self.stdout.write(self.style.SUCCESS(f'Successfully created empty usersetting.'))
+
         # Create dummy tasks
         task_ids = []
         for _ in range(50):
@@ -59,5 +63,5 @@ class Command(BaseCommand):
             # Add random tasks to the container
             tasks_to_add = Task.objects.filter(task_id__in=random.sample(task_ids, random.randint(1, 10)))
             container.tasks.set(tasks_to_add)
-        
+
         self.stdout.write(self.style.SUCCESS('Successfully created dummy task containers'))
