@@ -17,7 +17,7 @@ class Priority(models.TextChoices):
 class Task(models.Model):
     task_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     task_name = models.CharField(max_length=255)
-    task_desc = models.TextField()
+    task_desc = models.TextField(null=True, blank=True, max_length=255)
     created_date = models.DateTimeField(auto_now_add=True)
     target_date = models.DateTimeField()
     is_completed = models.BooleanField(default=False)
