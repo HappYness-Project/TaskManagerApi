@@ -87,13 +87,18 @@ class UserGroupTasksView(APIView):
     def get(self, request, user_group_id):
         is_important = request.query_params.get('isImportant')
 
-        if is_important is None:
-            return Response({"error": "Query parameter 'isImportant' is required."}, status=status.HTTP_400_BAD_REQUEST)
-
-        is_important = is_important.lower() == 'true'
-
+        if is_important :
+            is_important = is_important.lower() == 'true'
+            task_containers = TaskContainer.objects.filter(user_group_id=user_group_id)
+            tasks = Task.objects.filter(containers__in=task_containers, is_important=is_important).distinct()
+            serializer = TaskSerializer(tasks, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
         task_containers = TaskContainer.objects.filter(user_group_id=user_group_id)
-        tasks = Task.objects.filter(containers__in=task_containers, is_important=is_important).distinct()
+        tasks = Task.objects.filter(containers__in=task_containers).distinct()
         serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+        
+
+        
 

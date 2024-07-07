@@ -8,7 +8,7 @@ urlpatterns = [
     path('task-containers/<uuid:pk>/tasks/', views.TaskListCreateView.as_view(), name='task-list-create'),
     path('tasks/<uuid:pk>/', views.TaskDetailView.as_view(), name='task-detail'),
     path('tasks/<uuid:pk>/toggle-completion/', views.toggle_task_completion, name='task-complete-toggle'),
-    path('user-groups/<int:user_group_id>/tasks', views.UserGroupTasksView.as_view(), name='user-group-tasks'),
+    path('user-groups/<int:user_group_id>/tasks/', views.UserGroupTasksView.as_view(), name='user-group-tasks'),
 ]
 
 
