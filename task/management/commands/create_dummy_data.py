@@ -25,18 +25,26 @@ class Command(BaseCommand):
 
         # Create dummy users and assign them to user groups
         for _ in range(10):
+            # Create a UserSetting instance with a random default_group_id
+            default_group = random.choice(user_groups)
+            usersetting = UserSetting.objects.create(default_group_id=default_group.id)
+
+            # Create the User instance
             user = User.objects.create(
                 username=fake.user_name(),
                 email=fake.email(),
-                password='password123',
-                user_setting=None  # You can adjust this based on your UserSetting model
+                password='password123'
             )
-            user.user_groups.set(random.sample(user_groups, random.randint(1, len(user_groups))))
-            self.stdout.write(self.style.SUCCESS(f'Successfully created user {user.username}'))
 
-        for _ in range(5):
-            usersetting = UserSetting.objects.create()
-            self.stdout.write(self.style.SUCCESS(f'Successfully created empty usersetting.'))
+            # Assign the UserSetting to the User and save
+            user.user_setting = usersetting
+            user.save()
+
+            # Assign user groups
+            user.user_groups.set(random.sample(user_groups, random.randint(1, len(user_groups))))
+            user.save()  # Save again to ensure user_groups are assigned
+
+            self.stdout.write(self.style.SUCCESS(f'Successfully created user {user.username} with UserSetting'))
 
         # Create dummy tasks
         task_ids = []

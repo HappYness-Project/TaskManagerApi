@@ -38,6 +38,11 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TaskSerializer
     lookup_field = 'pk'
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 class TaskListCreateView(generics.ListCreateAPIView):
     serializer_class = TaskSerializer
 
