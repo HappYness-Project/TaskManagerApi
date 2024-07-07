@@ -6,3 +6,5 @@ urlpatterns = [
     # path('api/', include('task.urls')),  # Include URLs from the 'task' app
     # path('api/', include('users.urls')),
 ]
+
+

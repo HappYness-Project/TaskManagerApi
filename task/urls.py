@@ -10,3 +10,5 @@ urlpatterns = [
     path('tasks/<uuid:pk>/toggle-completion/', views.toggle_task_completion, name='task-complete-toggle'),
     path('user-groups/<int:user_group_id>/tasks', views.UserGroupTasksView.as_view(), name='user-group-tasks'),
 ]
+
+

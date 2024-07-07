@@ -19,6 +19,13 @@
 #     user_setting = UserSettingSerializer()
 #     user_groups = UserGroupSerializer(many=True)
 
+<<<<<<< HEAD
 #     class Meta:
 #         model = User
 #         fields = ['id', 'username', 'email', 'user_setting', 'user_groups']
+=======
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'user_setting', 'user_groups']
+
+>>>>>>> bbaa0bd (fix : add files that git didnt recognize)

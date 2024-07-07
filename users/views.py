@@ -31,7 +31,13 @@
 #         serializer = TaskContainerSerializer(task_containers, many=True)
 #         return Response(serializer.data)
     
+<<<<<<< HEAD
 # class UserDetail(generics.RetrieveAPIView):
 #     queryset = User.objects.all()
 #     serializer_class = UserSerializer
 
+=======
+class UserDetail(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+>>>>>>> bbaa0bd (fix : add files that git didnt recognize)

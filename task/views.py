@@ -96,3 +96,4 @@ class UserGroupTasksView(APIView):
         tasks = Task.objects.filter(containers__in=task_containers, is_important=is_important).distinct()
         serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
