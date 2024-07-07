@@ -74,14 +74,17 @@ def toggle_task_completion(request, pk):
     except Task.DoesNotExist:
         return Response({"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
     
-    is_completed = request.data.get('is_completed', None)
-    if is_completed is not None:
-        task.is_completed = not is_completed
+    is_completed = task.is_completed
+    if is_completed is True:
+        task.is_completed = False
         task.save()
-        
-        return Response(status=status.HTTP_200_OK)
+        serializer = TaskSerializer(task)
     else:
-        return Response({"error": "is_completed field missing in request data"}, status=status.HTTP_400_BAD_REQUEST)
+        task.is_completed = True
+        task.save()
+        serializer = TaskSerializer(task)
+    
+    return Response(status=status.HTTP_200_OK)
     
 class UserGroupTasksView(APIView):
     def get(self, request, user_group_id):
