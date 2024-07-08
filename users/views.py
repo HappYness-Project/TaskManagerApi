@@ -31,8 +31,6 @@ class TaskContainerListByUserGroup(APIView):
         serializer = TaskContainerSerializer(task_containers, many=True)
         return Response(serializer.data)
     
-
-
 class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer

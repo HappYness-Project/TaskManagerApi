@@ -2,6 +2,7 @@ from django.db import models
 import uuid
 from django.contrib.auth import get_user_model
 from users.models import UserGroup
+from django.utils import timezone
 
 class TaskCategory(models.TextChoices):
     GROCERY = 'grocery', 'Grocery'
@@ -19,7 +20,7 @@ class Task(models.Model):
     task_name = models.CharField(max_length=255)
     task_desc = models.TextField(null=True, blank=True, max_length=255)
     created_date = models.DateTimeField(auto_now_add=True)
-    target_date = models.DateTimeField()
+    target_date = models.DateTimeField(null=True)
     is_completed = models.BooleanField(default=False)
     priority = models.CharField(max_length=10, choices=Priority.choices)
     task_category = models.CharField(max_length=10, choices=TaskCategory.choices)

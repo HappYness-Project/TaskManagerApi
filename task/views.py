@@ -23,7 +23,8 @@ class UserTaskContainerListView(generics.ListAPIView):
     def get_queryset(self):
         user_pk = self.kwargs['user_pk']
         user = get_object_or_404(User, pk=user_pk)
-        return TaskContainer.objects.filter(users=user)
+        user_groups = user.user_groups.all()  # Get all user groups for this user
+        return TaskContainer.objects.filter(user_group__in=user_groups)
 
 class TaskListView(generics.ListAPIView):
     serializer_class = TaskSerializer
@@ -75,16 +76,11 @@ def toggle_task_completion(request, pk):
         return Response({"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
     
     is_completed = task.is_completed
-    if is_completed is True:
-        task.is_completed = False
-        task.save()
-        serializer = TaskSerializer(task)
-    else:
-        task.is_completed = True
-        task.save()
-        serializer = TaskSerializer(task)
+    task.is_completed = not is_completed  # Toggle the completion status
+    task.save()
     
-    return Response(status=status.HTTP_200_OK)
+    serializer = TaskSerializer(task)
+    return Response(serializer.data, status=status.HTTP_200_OK)
     
 class UserGroupTasksView(APIView):
     def get(self, request, user_group_id):
