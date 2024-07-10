@@ -23,4 +23,5 @@ Inside the root of the project, You should run
 ```sh
 docker-compose up
 ```
+Running the docker container will automate the db migration process itself, so you do not need to manually run migration commands.
 
