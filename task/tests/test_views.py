@@ -19,7 +19,7 @@ class TaskViewTests(TestCase):
             task_name='Test Task', priority='urgent', task_category='work'
         )
         
-    def test_task_container_list(self):
+    def test_given_existing_task_container_when_list_is_requested_then_container_is_in_response(self):
         url = reverse('task-container-list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -30,26 +30,26 @@ class TaskViewTests(TestCase):
         container_names = [container['container_name'] for container in response_data]
         self.assertIn('Test Container', container_names)
 
-    def test_task_container_detail(self):
+    def test_given_task_container_when_detail_is_requested_then_correct_container_is_returned(self):
         url = reverse('task-container-detail', kwargs={'pk': self.task_container.pk})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json()['container_name'], 'Test Container')
 
-    def test_task_list_create(self):
+    def test_should_return_new_task_when_task_is_created_in_task_container(self):
         url = reverse('task-list-create', kwargs={'pk': self.task_container.pk})
         data = {'task_name': 'New Task', 'priority': 'normal', 'task_category': 'leisure'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.json()['task_name'], 'New Task')
 
-    def test_task_detail(self):
+    def test_given_existing_task_when_detail_is_requested_then_correct_task_is_returned(self):
         url = reverse('task-detail', kwargs={'pk': self.task.pk})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json()['task_name'], 'Test Task')
 
-    def test_toggle_task_completion(self):
+    def test_should_update_task_completion_status_when_task_is_toggled(self):
         url = reverse('task-complete-toggle', kwargs={'pk': self.task.pk})
         response = self.client.patch(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
