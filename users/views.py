@@ -17,7 +17,7 @@ class UserGroupDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = UserGroup.objects.all()
     serializer_class = UserGroupSerializer
 
-class UserGroupListView(generics.ListAPIView):
+class UserGroupListByUser(generics.ListAPIView):
     serializer_class = UserGroupSerializer
 
     def get_queryset(self):
