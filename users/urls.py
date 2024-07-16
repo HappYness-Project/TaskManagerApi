@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import UserGroupList, UserGroupListByUser, UserGroupDetail, TaskContainerListByUserGroup, UserDetail, UserCreate
+from .views import UserGroupList, UserGroupListByUser, UserGroupDetail, TaskContainerListByUserGroup, UserDetail, UserCreate, AddUserToGroupView
 
 urlpatterns = [
     path('user-groups/', UserGroupList.as_view(), name='user-group-list'),
@@ -8,6 +8,7 @@ urlpatterns = [
     path('users/<int:pk>/user-groups/', UserGroupListByUser.as_view(), name='user-group-list'),
     path('users/<int:pk>/', UserDetail.as_view(), name='user-detail'),
     path('users/', UserCreate.as_view(), name='user-create'),
+    path('user-groups/<int:user_group_id>/users/', AddUserToGroupView.as_view(), name='add-user-to-group'),
 ]
 
 

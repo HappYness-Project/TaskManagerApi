@@ -46,3 +46,23 @@ class UserCreate(generics.CreateAPIView):
             self.perform_create(serializer)
             return Response(status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class AddUserToGroupView(APIView):
+    def post(self, request, user_group_id):
+        user_id = request.data.get('user_id')
+
+        # Validate user_id is provided
+        if not user_id:
+            return Response({"error": "user_id is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user = get_object_or_404(User, id=user_id)
+        user_group = get_object_or_404(UserGroup, id=user_group_id)
+
+        # Check if the user is already in the group
+        if user in user_group.group_users.all():
+            return Response({"detail": "User is already a member of the group."}, status=status.HTTP_200_OK)
+
+        user_group.group_users.add(user)
+        user_group.save()
+
+        return Response({"detail": "User added to group successfully."}, status=status.HTTP_201_CREATED)

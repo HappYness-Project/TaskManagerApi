@@ -13,7 +13,7 @@ class UserSetting(models.Model):
 
 class User(AbstractUser):
     user_setting = models.OneToOneField(UserSetting, on_delete=models.CASCADE, null=True)
-    user_groups = models.ManyToManyField(UserGroup, related_name='group_users')  # Unique related_name for User
+    user_groups = models.ManyToManyField(UserGroup, related_name='group_users') 
 
     def __str__(self):
         return self.username
