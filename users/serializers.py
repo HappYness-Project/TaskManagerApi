@@ -22,8 +22,13 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'email', 'first_name', 'last_name', 'user_setting', 'user_groups']
 
+class UserSerializerWithoutGroups(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'user_setting']  
+
 class UserGroupSerializer(serializers.ModelSerializer):
-    users = UserSerializer(many=True, read_only=True, source='group_users')
+    users = UserSerializerWithoutGroups(many=True, read_only=True, source='group_users')
 
     class Meta:
         model = UserGroup

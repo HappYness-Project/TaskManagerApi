@@ -11,11 +11,11 @@ from rest_framework import status
 User = get_user_model()
 
 class UserGroupList(generics.ListCreateAPIView):
-    queryset = UserGroup.objects.all()
+    queryset = UserGroup.objects.all().prefetch_related('group_users__user_setting')
     serializer_class = UserGroupSerializer
 
 class UserGroupDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = UserGroup.objects.all()
+    queryset = UserGroup.objects.all().prefetch_related('group_users__user_setting')
     serializer_class = UserGroupSerializer
 
 class UserGroupListByUser(generics.ListAPIView):
